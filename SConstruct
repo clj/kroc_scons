@@ -1,5 +1,10 @@
 import os
 
+try:
+    os.unlink('.coverage')
+except Exception, e:
+    print e
+
 # TODO:
 #   * The make driver scripts seem to always be called.
 

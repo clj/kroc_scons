@@ -20,6 +20,8 @@
 #
 
 import sys, os, getopt, re, shlex
+import coverage
+coverage.start() 
 
 VERSION = "$Revision$"[11:-2]
 CONTACT = "kroc-bugs@kent.ac.uk"
