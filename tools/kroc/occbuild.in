@@ -76,13 +76,16 @@ def split_options(opts):
 	return shlex.split(opts)
 
 def split_ext(file):
-	"""Given a filename, return its basename and extension."""
-	file = os.path.basename(file)
+	"""Given a filename, return its full path and extension."""
 	i = file.rfind(".")
 	if i == -1:
 		return (file, "")
 	else:
 		return (file[:i], file[i + 1:])
+
+def basename(file):
+	"""Given a path, return its basename (os.path.baseame)"""
+	return os.path.basename(file)
 
 def run(cmd):
 	"""Run a command, and check that it succeeded."""
@@ -151,11 +154,11 @@ def make_module(name, custom):
 
 	ofn = name + ".module"
 	f = open(ofn, "w")
-	f.write('-- Include file for "%s" module\n' % name)
+	f.write('-- Include file for "%s" module\n' % basename(name))
 	f.write('-- %s\n' % autogen_message)
 	f.write("\n")
 
-	guard = ofn.replace("_", ".").upper()
+	guard = basename(ofn).replace("_", ".").upper()
 	f.write("#IF NOT (DEFINED (%s))\n" % guard)
 	f.write("#DEFINE %s\n" % guard)
 	f.write("\n")
@@ -357,11 +360,12 @@ class TVMToolchain:
 	def library(self, occam_objs, native_objs, base):
 		def custom(f):
 			if occam_objs != []:
-				f.write('#USE "%s.lib"\n' % base)
-				f.write("#PRAGMA COMMENT \"(spragma (uselib %s))\"\n" % base)
+				f.write('#USE "%s.lib"\n' % basename(base))
+				f.write("#PRAGMA COMMENT \"(spragma (uselib %s))\"\n" 
+				        % basename(base))
 			if native_objs != []:
 				f.write("#PRAGMA COMMENT \"(spragma (dynlib %s))\"\n"
-				        % (patterns["libname"] % base))
+				        % (patterns["libname"] % basename(base)))
 			f.write('\n')
 		make_module(base, custom)
 
