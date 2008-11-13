@@ -26,6 +26,9 @@ if ARGUMENTS.get('VERBOSE') != '1':
 	env[k] = comstrings[k]
 
 
+env['OCCBUILD_TOOLCHAIN'] = 'kroc'
+env['OCCAM_TOOLCHAIN'] = env['OCCBUILD_TOOLCHAIN']
+
 # Export it for use in the SConscripts
 Export('env')
 
@@ -44,20 +47,22 @@ SConscript('runtime/libtvm/SConscript')
 
 # Ensure that things that build with occbuild have triggered the building of all
 # the required tools, there might be a better palce and better way to do this
-env.Depends(env['SKROC'],    env['SCHEMESCANNER'])
-env.Depends(env['SLINKER'],  env['SCHEMESCANNER'])
-env.Depends(env['LIBRARY2'], env['SCHEMESCANNER'])
-env.Depends(env['OCCBUILD'], env['SKROC'])
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    env.Depends(env['SKROC'],    env['SCHEMESCANNER'])
+    env.Depends(env['SLINKER'],  env['SCHEMESCANNER'])
+    env.Depends(env['LIBRARY2'], env['SCHEMESCANNER'])
+    env.Depends(env['OCCBUILD'], env['SLINKER'])
+    env.Depends(env['OCCBUILD'], env['LIBRARY2'])
+    env.Depends(env['OCCBUILD'], env['SKROC'])
+if env['OCCAM_TOOLCHAIN'] == 'kroc':    
+    env.Depends(env['OCCBUILD'], env['KROC'])
 env.Depends(env['OCCBUILD'], env['ILIBR'])
 env.Depends(env['OCCBUILD'], env['OCC21'])
-env.Depends(env['OCCBUILD'], env['SLINKER'])
-env.Depends(env['OCCBUILD'], env['LIBRARY2'])
 env.Tool('occbuild', occbuild=env['OCCBUILD'])
 
 # Not sure if this is necessary
 env.Depends(env['SKROC'], env['TVM_CONFIG_H'])
 
-env['OCCBUILD_TOOLCHAIN'] = 'tvm'
 
 
 SConscript('modules/inmoslibs/libsrc/SConscript')
