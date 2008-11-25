@@ -1,0 +1,37 @@
+Import('env')
+local = env.Clone()
+
+conf = local.Configure(config_h = 'config.h', help=False)
+headers = Split('''
+      string.h malloc.h stdarg.h stdlib.h 
+      string.h strings.h unistd.h
+      ''')
+for header in headers: conf.CheckCHeader(header)
+local = conf.Finish()
+local.Append(CPPDEFINES='HAVE_CONFIG_H')
+
+tranx86_srcs    = Split('''
+    main.c tceread.c netcread.c 
+    support.c 
+    etcdump.c etcrtl.c 
+    tstack.c rtldump.c
+    rtlops.c regcolour.c asm386.c optimise.c
+    elf.c cpuid.c tstate.c 
+    etcops.c stubtable.c 
+    arch386.c archmips.c asmmips.c 
+    tcedump.c archsparc.c 
+    asmsparc.c archppc.c 
+    asmppc.c kif.c
+    ''')
+
+tranx86 = local.Program(
+        'tranx86', 
+        tranx86_srcs,
+        CPPPATH=local.Dir('../../runtime/ccsp/include'))
+
+local.Depends(tranx86, '../../runtime/ccsp/include/ccsp_config.h')
+
+env['TRANX86']         = tranx86
+env['ENV']['TRANX86']  = tranx86
+env['ENV']['OCTRAN']   = tranx86
+

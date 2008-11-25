@@ -1,0 +1,83 @@
+Import('env')
+local = env.Clone()
+
+def commonDefines(cnf):
+    #/* Externally visible CCSP configuration. */
+    #/* define to use per-CPU block allocator */
+    ##undef ALLOC_BLOCK
+    #/* define to use system malloc */
+    ##undef ALLOC_MALLOC
+    #/* define to use shared block allocator */
+    ##undef ALLOC_SBLOCK
+    #/* define to support blocking syscalls */
+    ##undef BLOCKING_SYSCALLS
+    #/* define to enable dynamic processes */
+    ##undef DYNAMIC_PROCS
+    #/* define to support CPU timers */
+    ##undef ENABLE_CPU_TIMERS
+    #/* define to enable multi-processor support */
+    ##undef ENABLE_MP
+    #/* define to enable the extended rendezvous */
+    ##undef EXTENDED_RENDEZVOUS
+    cnf.Define('MAX_RUNTIME_THREADS',
+          1, 'define number of runtime threads')
+    #/* define if building for RMoX */
+    ##undef OOS_BUILD
+    #/* define to enable output ALT support */
+    ##undef OUTPUT_ALTS
+    #/* define if big-endian target */
+    ##undef TARGET_BIGENDIAN
+    cnf.Define('TARGET_CPU_386', 
+          None, 'define if i386 or greater target')
+    #/* define if MIPS target */
+    ##undef TARGET_CPU_MIPS
+    #/* define if PowerPC-64 target */
+    ##undef TARGET_CPU_PPC64
+    #/* define if SPARC target */
+    ##undef TARGET_CPU_SPARC
+    #/* define if using cygwin */
+    ##undef TARGET_OS_CYGWIN
+    cnf.Define('TARGET_OS_DARWIN',
+          None, 'define if using darwin')      
+    #/* define to use POSIX threads for blocking syscalls and multi-processor */
+    ##undef USE_PTHREADS
+    #/* define to enable use of thread-local-storage */
+    ##undef USE_TLS
+
+conf = local.Configure(config_h = 'include/ccsp_config.h', help=False)
+commonDefines(conf)
+local = conf.Finish()
+
+conf = local.Configure(config_h = 'config.h', help=False)
+headers = Split('''
+    stdlib.h stdarg.h malloc.h sys/param.h sys/time.h 
+    string.h strings.h sys/ioctl.h time.h
+    ''')
+for header in headers: conf.CheckCHeader(header)
+conf.CheckLib('m', 'sin')
+commonDefines(conf)
+local = conf.Finish()
+
+local['MAKE_HEADER'] = local.File('utils/make-header.py')
+sched_srcs           = ['kernel/sched.c', 'config.h']
+
+local.Command(
+      'include/kitable.h',
+      sched_srcs,
+      Action(
+        'python $MAKE_HEADER --kitable $TARGET $SOURCES',
+        'Generating ccsp kitable'))
+
+local.Command(
+      'include/calltable.h',
+      sched_srcs,
+      Action(
+        'python $MAKE_HEADER --calltable $TARGET $SOURCES',
+        'Generating ccsp calltable'))
+
+local.Command(
+      'include/ccsp_cif_stubs.h',
+      sched_srcs,
+      Action(
+        'python $MAKE_HEADER --cif $TARGET $SOURCES',
+        'Generating ccsp cif stubs'))
