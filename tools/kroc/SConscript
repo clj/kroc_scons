@@ -36,11 +36,16 @@ if env['OCCAM_TOOLCHAIN'] == 'kroc':
     KROC_ARCHINCDIR
     KROC_MANDIR
     KROC_KROCDIR
+
+    TENABLEMP
     ''')
     subst      = dict()
     local_dict = local.Dictionary()
     for v in kroc_variables:
-        if v in local_dict: subst[v] = local_dict[v]
+        if v in local_dict: 
+            subst[v] = local_dict[v]
+        else:
+            subst[v] = ''
     subst['SED']          = local.WhereIs('sed')
     subst['OCCEXTRAOPTS'] = '' # FIXME: Set dep. on config
     kroc = local.Substitute('kroc', 'kroc.in', SUBST=subst)
