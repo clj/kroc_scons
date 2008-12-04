@@ -20,6 +20,7 @@
 #
 
 import sys, os, getopt, re, shlex
+from os.path import basename, dirname
 import coverage
 coverage.start() 
 
@@ -82,10 +83,6 @@ def split_ext(file):
 		return (file, "")
 	else:
 		return (file[:i], file[i + 1:])
-
-def basename(file):
-	"""Given a path, return its basename (os.path.baseame)"""
-	return os.path.basename(file)
 
 def run(cmd):
 	"""Run a command, and check that it succeeded."""
@@ -280,7 +277,10 @@ class KRoCToolchain:
 
 		objs = [split_ext(o)[0] + ".o" for o in occam_objs] + native_objs
 		if objs != []:
-			make_static(patterns["a"] % base, objs)
+			make_static(
+			    os.path.join(
+			      dirname(base), 
+			      patterns["a"] % basename(base)), objs)
 
 			if build_shared:
 				kroc_ldflags = split_options(capture(programs["kroc"] + ["--ldflags"]))

@@ -59,4 +59,5 @@ ilibr = local.Program(
 
 
 env['ILIBR'] = ilibr
+env['ENV']['ILIBR'] = ilibr
 env.AppendENVPath('SKROCPATH', os.path.dirname(ilibr[0].abspath))

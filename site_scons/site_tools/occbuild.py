@@ -104,9 +104,9 @@ def generate(env, **kw):
     env['BUILDERS']['OccamObject']  = tce_bld
     env['OCCBUILDCOM']              = '$OCCBUILD $_OCCBUILD_TOOLCHAIN $_OCCBUILD_SEARCH_DIRS $OCCBUILDFLAGS --object $SOURCES'
     env['BUILDERS']['OccamLibrary'] = lib_bld
-    env['OCCBUILDLIBRARYCOM']       = '$OCCBUILD $_OCCBUILD_TOOLCHAIN $_OCCBUILD_SEARCH_DIRS $OCCBUILDFLAGS --library $TARGET $SOURCES'
+    env['OCCBUILDLIBRARYCOM']       = '$OCCBUILD $_OCCBUILD_TOOLCHAIN $_OCCBUILD_SEARCH_DIRS $OCCBUILDFLAGS $_CCSPLIBDIR --library $TARGET $SOURCES'
     env['BUILDERS']['OccamProgram'] = prog_bld
-    env['OCCBUILDPROGRAMCOM']       = '$OCCBUILD $_OCCBUILD_TOOLCHAIN $_OCCBUILD_SEARCH_DIRS $OCCBUILDFLAGS --program $SOURCES'
+    env['OCCBUILDPROGRAMCOM']       = '$OCCBUILD $_OCCBUILD_TOOLCHAIN $_OCCBUILD_SEARCH_DIRS $OCCBUILDFLAGS $_CCSPLIBDIR --program $SOURCES'
     env['BUILDERS']['OccamBytecodeHeader'] = tbc_headr_bld
     env['TBCHEADERCOM']             = '$SKROC $_SKROC_SEARCH_DIRS $SKROCFLAGS --c -f $TARGET $SOURCES'
     env['OCCBUILD']                 = occbuild_path
@@ -116,13 +116,21 @@ def generate(env, **kw):
     env['SKROC_SEARCH_PFX']         = '-L '
     env['OCCBUILD_TOOLCHAIN']       = None
     env['_OCCBUILD_TOOLCHAIN']      = '${(OCCBUILD_TOOLCHAIN and "--toolchain $OCCBUILD_TOOLCHAIN" or "")}'
+    env['_CCSPLIBDIR']              = '${(CCSPLIBDIR and "-L$CCSPLIBDIR" or "")}'
     def OccLibDepend(self, node, lib_name):
+        print "odeps: %s (%s)-> %s" % (node, type(node), lib_name)
         if not isinstance(lib_name, list): list(lib_name)
         for lib in lib_name:
             self.Depends(node, self['OCCLIBS'][lib]['dep'])
             if 'inc' in self['OCCLIBS'][lib]:
                 for n in node:
+                    if not isinstance(n.env['INCPATH'], CLVar): 
+                        n.env['INCPATH'] = CLVar(n.env['INCPATH'])
+                    print n, lib, type(n), self['OCCLIBS'][lib]['inc']
+                    #n.env.Append(INCPATH=self['OCCLIBS'][lib]['inc'])
                     n.env.AppendUnique(INCPATH=self['OCCLIBS'][lib]['inc'])
+                    #n.env['INCPATH'] += str(self['OCCLIBS'][lib]['inc'])
+                    #print "moo" + str(n.env['INCPATH'])
     env.AddMethod(OccLibDepend)
     env['OCCLIBS'] = dict()
     env['INCPATH'] = CLVar('')

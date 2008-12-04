@@ -66,6 +66,7 @@ if env['OCCAM_TOOLCHAIN'] == 'tvm':
     env.Depends(env['OCCBUILD'], env['LIBRARY2'])
     env.Depends(env['OCCBUILD'], env['SKROC'])
 if env['OCCAM_TOOLCHAIN'] == 'kroc':    
+    env.Depends(env['OCCBUILD'], env['CCSP'])
     env.Depends(env['OCCBUILD'], env['TRANX86'])
     env.Depends(env['OCCBUILD'], env['KROC'])
 env.Depends(env['OCCBUILD'], env['ILIBR'])

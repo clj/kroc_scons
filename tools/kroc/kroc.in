@@ -705,8 +705,16 @@ kroc_krocdir="@KROC_KROCDIR@"
 #}}}
 #{{{  path-dependant options
 
-occ21="$kroc_archbindir/occ21"
-octran="$kroc_archbindir/tranx86"
+if [ -n "${OCC21+x}" ]; then
+  occ21="$OCC21" # Use value from env
+else
+  occ21="$kroc_archbindir/occ21"
+fi
+if [ -n "${OCTRAN+1}" ]; then
+  octran="$OCTRAN" # Use value from env
+else
+  octran="$kroc_archbindir/tranx86"
+fi
 
 if [ $dtraces -eq 1 ]; then
 	ocrts="-lkrocif -lccsptrace"
@@ -1138,28 +1146,28 @@ for src in $srcs; do
 	# .ktX files and TCO (and ETC) files
 	if [ $compile ]; then
 		if [ $usenocc ]; then
-			tcefile="$base.etc"
+			tcefile="$dir$base.etc"
 			tsuffix="etc"
 		else
-			tcefile="$base.tce"
+			tcefile="$dir$base.tce"
 		fi
 		if [ "X$translate" != "X" -a "X$outfile" != "X" ]; then
 			tfile=$outfile
 		else
-			tfile="$base.$tsuffix"
+			tfile="$dir$base.$tsuffix"
 		fi
 		tmpfiles="$tmpfiles $tcefile $tfile"
 	fi
 
 	# Native assembler file
-	sfile="$base.s"
+	sfile="$dir$base.s"
 	tmpfiles="$tmpfiles $sfile"
 
 	# Native object file
 	if [ "X$link" != "X" -a "X$outfile" != "X" ]; then
 		ofile=$outfile
 	else
-		ofile="$base.o"
+		ofile="$dir$base.o"
 	fi
 	tmpfiles="$tmpfiles $ofile"
 

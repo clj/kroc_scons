@@ -7,20 +7,28 @@ def commonDefines(cnf):
     ##undef ALLOC_BLOCK
     #/* define to use system malloc */
     ##undef ALLOC_MALLOC
+    #AC_DEFINE([ALLOC_MALLOC],1,[define to use system malloc])
+    cnf.Define('ALLOC_MALLOC', 1, 'define to use system malloc')
     #/* define to use shared block allocator */
     ##undef ALLOC_SBLOCK
     #/* define to support blocking syscalls */
     ##undef BLOCKING_SYSCALLS
+    #AC_DEFINE([BLOCKING_SYSCALLS],1,[define to support blocking syscalls])
+    cnf.Define('BLOCKING_SYSCALLS', 1, 'define to support blocking syscalls')
     #/* define to enable dynamic processes */
     ##undef DYNAMIC_PROCS
+    # AC_DEFINE([DYNAMIC_PROCS],1,[define to enable dynamic processes])
+    cnf.Define('DYNAMIC_PROCS', 1, 'define to enable dynamic processes')
     #/* define to support CPU timers */
     ##undef ENABLE_CPU_TIMERS
     #/* define to enable multi-processor support */
     ##undef ENABLE_MP
     #/* define to enable the extended rendezvous */
     ##undef EXTENDED_RENDEZVOUS
+    #AC_DEFINE([MAX_RUNTIME_THREADS],32,[define number of runtime threads])
+    #AC_DEFINE([MAX_RUNTIME_THREADS],1,[define number of runtime threads])
     cnf.Define('MAX_RUNTIME_THREADS',
-          1, 'define number of runtime threads')
+          32, 'define number of runtime threads')
     #/* define if building for RMoX */
     ##undef OOS_BUILD
     #/* define to enable output ALT support */
@@ -28,7 +36,7 @@ def commonDefines(cnf):
     #/* define if big-endian target */
     ##undef TARGET_BIGENDIAN
     cnf.Define('TARGET_CPU_386', 
-          None, 'define if i386 or greater target')
+          1, 'define if i386 or greater target')
     #/* define if MIPS target */
     ##undef TARGET_CPU_MIPS
     #/* define if PowerPC-64 target */
@@ -38,9 +46,13 @@ def commonDefines(cnf):
     #/* define if using cygwin */
     ##undef TARGET_OS_CYGWIN
     cnf.Define('TARGET_OS_DARWIN',
-          None, 'define if using darwin')      
+          1, 'define if using darwin')      
     #/* define to use POSIX threads for blocking syscalls and multi-processor */
     ##undef USE_PTHREADS
+    # AC_DEFINE([USE_PTHREADS],1,[define to use POSIX threads for blocking syscalls and multi-processor])
+    cnf.Define('USE_PTHREADS',
+	1,
+	'define to use POSIX threads for blocking syscalls and multi-processor')
     #/* define to enable use of thread-local-storage */
     ##undef USE_TLS
 
@@ -56,6 +68,61 @@ headers = Split('''
 for header in headers: conf.CheckCHeader(header)
 conf.CheckLib('m', 'sin')
 commonDefines(conf)
+#AC_DEFINE([BLOCKING_SYSCALLS_UNSUPPORTED],1,[define if blocking syscalls are unsupported])
+#AC_DEFINE([BLOCKING_PROFILE],1,[define to enable blocking syscall profiling])
+#AC_DEFINE([BLOCKING_DEBUG],1,[define to enable blocking syscall debugging])
+#AC_DEFINE([BLOCKING_STOP],1,[define to allow blocking calls to stop when they receive SIGSEGV])
+# AC_DEFINE([HAVE_IA32_SSE2], 1, [CPU supports SSE2 instructions])
+conf.Define('HAVE_IA32_SSE2', 1, 'CPU supports SSE2 instructions')
+# AC_DEFINE([DMEM_USE_MMAP],1,[define this if fixed anonymous memory-mapping is supported])
+conf.Define('DMEM_USE_MMAP', 
+    1, 'define this if fixed anonymous memory-mapping is supported')
+# AC_DEFINE_UNQUOTED([DMEM_MEMBASE],$map_membase,[defines the default memory base for fixed mappings])
+map_membase = '0x80000000'
+conf.Define('DMEM_MEMBASE', 
+    map_membase, 'defines the default memory base for fixed mappings')
+# AC_DEFINE([DMEM_MMAP_INVFD],1,[define this if anonymous memory-mapping is done on an invalid descriptor])
+conf.Define('DMEM_MMAP_INVFD', 
+    1, 
+    'define this if anonymous memory-mapping is done on an invalid descriptor')
+# AC_DEFINE([DMEM_MMAP_FIXED],1,[define this if MAP_FIXED must be given for fixed mappings])
+#AC_DEFINE([ENABLE_CPU_TIMERS],1,[define to support CPU timers])
+#AC_DEFINE([DEBUG_DEBUG],1,[define to enable debug debugging])
+#AC_DEFINE([DM_DEBUG],1,[define to enable dynamic memory debugging])
+#   AC_DEFINE([DM_DEBUG_LIBELF],1,[define to use libelf with dynamic memory debugging])
+#AC_DEFINE([GENERATE_CORES],1,[define to let CCSP drop core files])
+#AC_DEFINE([DEADLOCK_TERSE],1,[define to enable terse deadlock debugging])
+#AC_DEFINE([DEADLOCK_BRIEF],1,[define to enable brief deadlock debugging])
+#AC_DEFINE([USEFUL_SEGFAULT],1,[define to enable a verbose segfault])
+#AC_DEFINE([USEFUL_FPEDEBUG],1,[define to enable verbose FPE messages])
+# AC_DEFINE([DEBUG_DYNPROC],1,[define to enable dynamic process debugging])
+#AC_DEFINE([ENABLE_KTRACES],1,[define to enable kernel traces])
+# AC_DEFINE([ENABLE_DTRACES],1,[define to enable debugging traces])
+#AC_DEFINE([ENABLE_MP],1,[define to enable multi-processor support])
+# AC_DEFINE([HAVE_UALARM],1,[define if this system has ualarm()])
+conf.Define('HAVE_UALARM', 1, 'define if this system has ualarm()')
+#AC_DEFINE([RMOX_BUILD],1,[define if building for RMoX])
+# AC_DEFINE([ALLOC_BLOCK],1,[define to use per-CPU block allocator])
+#  AC_DEFINE([ALLOC_SBLOCK],1,[define to use shared block allocator])
+# AC_DEFINE([USE_TLS],1,[define to enable use of thread-local-storage])
+# AC_DEFINE([TARGET_CPU_386],1,[define if i386 or greater target])
+#conf.Define('TARGET_CPU_386', 1, 'define if i386 or greater target')
+# AC_DEFINE([TARGET_CPU_SPARC],1,[define if SPARC target])
+# AC_DEFINE([TARGET_CPU_PPC64],1,[define if PowerPC-64 target])
+# AC_DEFINE([TARGET_CPU_MIPS],1,[define if MIPS target])
+#AC_DEFINE([TARGET_BIGENDIAN],1,[define if big-endian target])
+#AC_DEFINE([TARGET_OS_CYGWIN],1,[define if using cygwin])
+#AC_DEFINE([NO_ASM_TYPE_DIRECTIVE],1,[don't produce ELF symbol type directives])
+conf.Define('NO_ASM_TYPE_DIRECTIVE',
+    1, 'don\'t produce ELF symbol type directives') #AC_DEFINE([TARGET_OS_DARWIN],1,[define if using Darwin])
+#conf.Define('TARGET_OS_DARWIN', 1, 'define if using Darwin')
+#AC_DEFINE([NO_ASM_TYPE_DIRECTIVE],1,[don't produce ELF symbol type directives])
+#AC_DEFINE([CCSP_MINIMUM_SLEEP_US],2000,[default minimum sleep (microseconds)])
+#AC_DEFINE([CCSP_MINIMUM_SLEEP_US],10,[default minimum sleep (microseconds)])
+conf.Define('CCSP_MINIMUM_SLEEP_US', 
+    2000, 'default minimum sleep (microseconds)')
+#AC_DEFINE([TARGET_OS_FREEBSD],1,[define if using FreeBSD])
+#AC_DEFINE([OPTIMISE_SIZE],1,[define to optimise for size over speed])
 local = conf.Finish()
 
 local['MAKE_HEADER'] = local.File('utils/make-header.py')
@@ -81,3 +148,37 @@ local.Command(
       Action(
         'python $MAKE_HEADER --cif $TARGET $SOURCES',
         'Generating ccsp cif stubs'))
+
+
+libccsp_srcs = Split('''
+	common/dmem.c
+	common/dtrace.c
+	common/mobproc.c
+	common/rtsmain.c
+	common/timercal.c
+	common/userproc.c
+	kernel/bsyscalls.c
+	kernel/deadlock.c
+	kernel/dynproc.c
+	kernel/entry.c
+	kernel/sched.c
+	kernel/stats.c
+  ''')
+
+#FIXME: Darwin only
+local.Append(CFLAGS=['-mdynamic-no-pic'])
+# FIXME: May depend on arch
+local.Append(CFLAGS=['-fomit-frame-pointer', 
+                     '-fno-strict-aliasing', 
+		     '-O2', # Have to compile with inlining...
+		     '-Wpointer-arith'])
+local.Append(CPPDEFINES=['SIGNAL_TYPE_SYSV', 'TIME_WITH_SYS_TIME'])
+local.Append(CPPDEFINES=['HAVE_CONFIG_H'])
+
+libccsp = local.Library(
+        'ccsp',
+        libccsp_srcs,
+        CPPPATH=['.', 'include'])
+
+env['CCSP'] = libccsp
+env['CCSPLIBDIR'] = Dir('.')

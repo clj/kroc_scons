@@ -7,7 +7,9 @@ local = env.Clone()
 # @TVM_BINDIR@, @TVM_LIBDIR@, @TVM_EXAMPLESDIR@
 
 occbuild = local.Substitute(
-    'occbuild', 'occbuild.in', SUBST=dict(TVM_LIBDIR='moo'))
+    'occbuild', 'occbuild.in', SUBST=dict(
+        TVM_LIBDIR='moo',
+        KROC_HOST_OS='darwin'))
 local.AddPostAction(occbuild, Chmod('$TARGET', 0755))
 
 env['OCCBUILD'] = occbuild
@@ -47,7 +49,9 @@ if env['OCCAM_TOOLCHAIN'] == 'kroc':
         else:
             subst[v] = ''
     subst['SED']          = local.WhereIs('sed')
-    subst['OCCEXTRAOPTS'] = '' # FIXME: Set dep. on config
+    subst['OCCEXTRAOPTS']  = '' # FIXME: Set dep. on config
+    subst['KROC_HOST_OS']  = 'darwin' # FIXME: !!!
+    subst['KROC_HOST_CPU'] = 'i386' #FIXME: !!!
     kroc = local.Substitute('kroc', 'kroc.in', SUBST=subst)
     local.AddPostAction(kroc, Chmod('$TARGET', 0755))
     env['KROC'] = kroc

@@ -7,6 +7,32 @@ headers = Split('''
       string.h strings.h unistd.h
       ''')
 for header in headers: conf.CheckCHeader(header)
+
+
+conf.Define('MP_ENABLE', 
+    1, 'define to enable multi-processor code-generation support')
+conf.Define('PROCESS_PRIORITY',
+    1, 'define to enable process priority')
+# AC_DEFINE([MP_ENABLE],1,[define to enable multi-processor code-generation support])
+# AC_DEFINE([PROCESS_PRIORITY],1,[define to enable process priority])
+conf.Define('CAN_DO_DOTLABELS', 
+    1, 'define if the assembler supports .Lnnn style  local-labels')
+conf.Define('OLD_ASSEMBLER', 
+    1, 'define if ia32 assembler does not understand fucom, fildl or fildd')
+# AC_DEFINE([OLD_ASSEMBLER],1,[define if ia32 assembler does not understand fucom, fildl or fildd])
+# AC_DEFINE([CAN_DO_DOTLABELS],1,[define if the assembler supports .Lnnn style local-labels])
+conf.Define('HOST_CPU_IS_I386', 1, 'define for 386 CPUs')
+#conf.Define('HOST_CPU_IS_I486', 1, 'define for 486/586/686 and compatible CPUs')
+#conf.Define('HOST_OS_IS_LINUX', 1 ,'define for Linux')
+# AC_DEFINE([HOST_CPU_IS_I486],1,[define for 486/586/686 and compatible CPUs])
+# AC_DEFINE([HOST_CPU_IS_I386],1,[define for 386 CPUs])
+# AC_DEFINE([HOST_CPU_IS_MIPS],1,[define for MIPS CPUs])
+# AC_DEFINE([HOST_CPU_IS_SPARC],1,[define for Sparc CPUs])
+# AC_DEFINE([HOST_CPU_IS_PPC64],1,[define for PowerPC-64 CPUs])
+# AC_DEFINE([HOST_OS_IS_SOLARIS],1,[define for Sun Solaris])
+# AC_DEFINE([HOST_OS_IS_LINUX],1,[define for Linux])
+# AC_DEFINE([HOST_OS_IS_CYGWIN],1,[define for cygwin])
+# AC_DEFINE([HOST_OS_IS_IRIX],1,[define for SGI IRIX])
 local = conf.Finish()
 local.Append(CPPDEFINES='HAVE_CONFIG_H')
 
