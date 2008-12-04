@@ -47,13 +47,32 @@ def find_dep(fn, dep, incpath):
 		dpath = os.path.normpath(os.path.join(dir, dep))
 		if os.access(dpath, os.F_OK):
 			return dpath
-	return None
+	#return None
+	return fn
+
+def struct_to_makefile_deps(deps):
+    new = dict()
+    for k in deps.keys():
+        ls = deps[k].keys()
+        new[k + " : " + ' '.join(ls)] = True
+    return new.keys()
+
+def struct_to_xxx_deps(deps):
+    new = dict()
+    for k in deps.keys():
+        new[k] = deps[k].keys()
+    return new
 
 def generate_dep(fn, dep, incpath, binaries, deps):
 	dep_fn = find_dep(fn, dep, incpath)
 	if dep_fn is not None:
 		target = re.sub(r'\.occ$', r'.tce', fn)
-		deps[object(target, binaries) + ": " + object(dep_fn, binaries)] = True
+		# deps[object(target, binaries) + ": " + object(dep_fn, binaries)] = True
+	        if not object(target, binaries) in deps: 
+	            deps[object(target, binaries)] = dict()
+		inner_dict = deps[object(target, binaries)]
+		inner_dict[object(dep_fn, binaries)] = True
+		
 	else:
 		print >>sys.stderr, "Cannot find dependency: %s: %s" % (fn, dep)
 	return dep_fn
@@ -162,6 +181,7 @@ def parse(fn, deps, incpath, binaries, defines = {}):
 			if not name.endswith(".lib"):
 				name += ".tce"
 			generate_dep(fn, name, incpath, binaries, deps)
+			
 	f.close()
 
 def usage():
@@ -195,7 +215,9 @@ if __name__ == "__main__":
 	deps = {}
 	for file in sources:
 		parse(file, deps, incpath, binaries)
-	deplines = deps.keys()
+	#deplines = deps.keys()
+	print struct_to_xxx_deps(deps)
+	deplines = struct_to_makefile_deps(deps)
 	deplines.sort()
 
 	startmarker = "## begin pideps dependencies"
