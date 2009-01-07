@@ -16,6 +16,9 @@ tools = ['default',
 env  = Environment(tools=tools,
 		   ENV = {'PATH' : os.environ['PATH']})
 
+env['OCCBUILD_TOOLCHAIN'] = 'kroc'
+env['OCCAM_TOOLCHAIN'] = env['OCCBUILD_TOOLCHAIN']
+
 # Pretty builds
 comstrings = dict(CCCOMSTR              = 'Compiling $TARGET',
                   LINKCOMSTR            = 'Linking $TARGET',
@@ -26,13 +29,10 @@ comstrings = dict(CCCOMSTR              = 'Compiling $TARGET',
 		  OCCBUILDLIBRARYCOMSTR = 'Linking $TARGET',
 		  OCCBUILDPROGRAMCOMSTR = 'Compiling $TARGET',
 		  TBCHEADERCOMSTR       = 'Compiling bytecode header $TARGET')
-if ARGUMENTS.get('VERBOSE') != '1':
+if int(ARGUMENTS.get('VERBOSE', 0)) < 1:
     for k in comstrings:
 	env[k] = comstrings[k]
 
-
-env['OCCBUILD_TOOLCHAIN'] = 'kroc'
-env['OCCAM_TOOLCHAIN'] = env['OCCBUILD_TOOLCHAIN']
 
 # Export it for use in the SConscripts
 Export('env')
@@ -72,6 +72,18 @@ if env['OCCAM_TOOLCHAIN'] == 'kroc':
 env.Depends(env['OCCBUILD'], env['ILIBR'])
 env.Depends(env['OCCBUILD'], env['OCC21'])
 env.Tool('occbuild', occbuild=env['OCCBUILD'])
+
+# Be even more verbose :)
+if int(ARGUMENTS.get('VERBOSE', 0)) >= 2:
+    env.AppendUnique(OCCBUILDFLAGS='--verbose')
+if int(ARGUMENTS.get('VERBOSE', 0)) >= 3:
+    if env['OCCAM_TOOLCHAIN'] == 'tvm':
+        env.AppendUnique(OCCBUILDFLAGS='--skroc-opts --verbose')
+    if env['OCCAM_TOOLCHAIN'] == 'kroc':
+        env.AppendUnique(OCCBUILDFLAGS='--kroc-opts --verbose')
+
+
+
 
 # Not sure if this is necessary
 if env['OCCAM_TOOLCHAIN'] == 'tvm':
