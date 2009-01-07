@@ -169,13 +169,13 @@ for f in forall_early_srcs:
     forall_early_objs.append(local.OccamObject(
         f, 
         INCPATH=['.', '../maths'], 
-        OCCBUILDFLAGS='--no-std-libs'))
+        OCCBUILDFLAGS='$OCCBUILDFLAGS --no-std-libs'))
 
 forall_early = local.OccamLibrary(
     'forall_early.lib', 
     forall_early_objs, 
     INCPATH=['.', '../maths'], 
-    OCCBUILDFLAGS='--no-std-libs')
+    OCCBUILDFLAGS='$OCCBUILDFLAGS --no-std-libs')
 
 
 
@@ -190,7 +190,7 @@ forall = forall_late  = local.OccamLibrary(
     'forall.lib',
     forall_early_objs + forall_late_srcs, 
     INCPATH=['.', '../maths'], 
-    OCCBUILDFLAGS='--no-std-libs --occ21-opts="-ZLC forall_early.lib"')
+    OCCBUILDFLAGS='$OCCBUILDFLAGS --no-std-libs --occ21-opts="-ZLC forall_early.lib"')
     # Note: -ZLC = change compiler library to <lib>
     # so we can do a more sane two stage build.
 
