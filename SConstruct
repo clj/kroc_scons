@@ -75,12 +75,12 @@ env.Tool('occbuild', occbuild=env['OCCBUILD'])
 
 # Be even more verbose :)
 if int(ARGUMENTS.get('VERBOSE', 0)) >= 2:
-    env.AppendUnique(OCCBUILDFLAGS='--verbose')
+    env.AppendUnique(OCCBUILDFLAGS='$( --verbose $)')
 if int(ARGUMENTS.get('VERBOSE', 0)) >= 3:
     if env['OCCAM_TOOLCHAIN'] == 'tvm':
-        env.AppendUnique(OCCBUILDFLAGS='--skroc-opts --verbose')
+        env.AppendUnique(OCCBUILDFLAGS='$( --skroc-opts --verbose $)')
     if env['OCCAM_TOOLCHAIN'] == 'kroc':
-        env.AppendUnique(OCCBUILDFLAGS='--kroc-opts --verbose')
+        env.AppendUnique(OCCBUILDFLAGS='$( --kroc-opts --verbose $)')
 
 
 
