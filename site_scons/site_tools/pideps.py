@@ -66,7 +66,8 @@ def struct_to_xxx_deps(deps):
 def generate_dep(fn, dep, incpath, binaries, deps):
 	dep_fn = find_dep(fn, dep, incpath)
 	if dep_fn is not None:
-		target = re.sub(r'\.occ$', r'.tce', fn)
+		#target = re.sub(r'\.occ$', r'.tce', fn)
+		target = fn
 		# deps[object(target, binaries) + ": " + object(dep_fn, binaries)] = True
 	        if not object(target, binaries) in deps: 
 	            deps[object(target, binaries)] = dict()
@@ -141,6 +142,18 @@ def parse_expr(expr, defines):
 					die("Bad usage of DEFINED:", expr)
 				val = tokens[i + 1] in defines
 				i += 3
+			elif t in ["=", ">=", "<=", "<", ">"]:
+				if val is None:
+					die("Bad usage of ", t, ":", expr)
+				evaluated = evaluate(tokens[i:])
+				mapping = {"=": "=="}
+				if t in mapping: t = mapping[t]
+				val = eval("v %s e" % t, dict(v=val, e=evaluated, __builtins__={}), dict())
+				i = len(tokens)
+			elif t in defines:
+				val = defines[t]
+			elif t.isdigit():
+				val = t
 			else:
 				die("Unrecognised token in expression:", expr, ": ", t)
 

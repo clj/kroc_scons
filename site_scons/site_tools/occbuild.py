@@ -27,17 +27,55 @@ def pideps_scan(node, env, path):
     # here automatically? Evaluate and extract -D out the $OCCBUILDCOMSTR to see 
     # what to add here
     defines = {}
+    # FIXME: Obviously these need to come from a call to occ21
+    defines_from_occ21 = \
+    """\
+#DEFINE MPA.TEMP.VS -2
+#DEFINE MPP.CODEMAP 13
+#DEFINE MPP.TYPEHASH 12
+#DEFINE MPP.BARRIER 8
+#DEFINE MPP.MAPCHAIN 3
+#DEFINE MPP.AIPTR 2
+#DEFINE MPP.IPTR 1
+#DEFINE MPP.WPTR 0
+#DEFINE TARGET.HAS.FPU
+#DEFINE TARGET.BITS.PER.WORD 32
+#DEFINE TARGET.BYTES.PER.WORD 4
+#DEFINE TARGET.CANONICAL "i386"
+#DEFINE VERSION "OFA 1.4.0K"
+#DEFINE INITIAL.DECL
+#DEFINE EXTENDED.RENDEZVOUS
+#DEFINE MOBILE.PROC.TYPES
+#DEFINE MOBILE.DATA.TYPES
+#DEFINE MOBILES
+#DEFINE USER.DEFINED.OPERATORS
+#DEFINE OCCAM2.5
+#DEFINE PROCESSOR.AFFINITY 32
+#DEFINE PROCESS.PRIORITY 32
+#DEFINE OCCBUILD.KROC
+"""
+    for line in defines_from_occ21.split('\n'):
+        #print line
+        d = line.split(' ', 2)[1:]
+        if len(d) == 1:
+            defines[d[0]] = True
+        elif len(d) == 2:
+            defines[d[0]] = d[1]
+    #print defines 
     binaries = []
     deps = {}
     path = [os.path.abspath(d.path) for d in path]
     pideps.parse(node.path, deps, path, binaries, defines)
-    deplines = deps.keys()
+    deplines = pideps.struct_to_xxx_deps(deps)
+    deps = deplines.get(node.path, [])
+    deps = [os.path.abspath(d) for d in deps]
+    #print 'DEPS:', os.path.basename(node.path), ':', deps
     #deplines.sort()
-    deplines = [l.split(' ')[1].split(' ') for l in deplines]
-    deplines = reduce(lambda x, y: x + y, deplines, [])
-    deplines = [os.path.abspath(x) for x in deplines]
-    print deplines
-    return deplines
+    #deplines = [l.split(' ')[1].split(' ') for l in deplines]
+    #deplines = reduce(lambda x, y: x + y, deplines, [])
+    #deplines = [os.path.abspath(x) for x in deplines]
+    #print deplines
+    return deps
 
 # This emitter will be used later by a Builder, and set an explicit dependency
 # on the argument passed in as 'dependency', most probably occbuild
@@ -78,9 +116,9 @@ def generate(env, **kw):
     tce_bld = Builder(action = Action('$OCCBUILDCOM', '$OCCBUILDCOMSTR'),
                       emitter = depend_emitter,
                       suffix = '.tce',
-                      src_suffix = '.occ')
+                      src_suffix = '.occ',
                       # FIXME: The source scanner does not work well enough yet :/
-                      #source_scanner = pideps_scanner)
+                      source_scanner = pideps_scanner)
     lib_bld = Builder(action = Action('$OCCBUILDLIBRARYCOM', '$OCCBUILDLIBRARYCOMSTR'),
                       emitter = [depend_emitter, occbuild_library_emitter],
                       suffix = '.lib',
@@ -118,7 +156,7 @@ def generate(env, **kw):
     env['_OCCBUILD_TOOLCHAIN']      = '${(OCCBUILD_TOOLCHAIN and "--toolchain $OCCBUILD_TOOLCHAIN" or "")}'
     env['_CCSPLIBDIR']              = '${(CCSPLIBDIR and "-L$CCSPLIBDIR" or "")}'
     def OccLibDepend(self, node, lib_name):
-        print "odeps: %s (%s)-> %s" % (node, type(node), lib_name)
+        #print "odeps: %s (%s)-> %s" % (node, type(node), lib_name)
         if not isinstance(lib_name, list): list(lib_name)
         for lib in lib_name:
             self.Depends(node, self['OCCLIBS'][lib]['dep'])
@@ -126,7 +164,7 @@ def generate(env, **kw):
                 for n in node:
                     if not isinstance(n.env['INCPATH'], CLVar): 
                         n.env['INCPATH'] = CLVar(n.env['INCPATH'])
-                    print n, lib, type(n), self['OCCLIBS'][lib]['inc']
+                    #print n, lib, type(n), self['OCCLIBS'][lib]['inc']
                     #n.env.Append(INCPATH=self['OCCLIBS'][lib]['inc'])
                     n.env.AppendUnique(INCPATH=self['OCCLIBS'][lib]['inc'])
                     #n.env['INCPATH'] += str(self['OCCLIBS'][lib]['inc'])
