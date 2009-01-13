@@ -40,6 +40,8 @@ if env['OCCAM_TOOLCHAIN'] == 'kroc':
     KROC_KROCDIR
 
     TENABLEMP
+
+    DEXTLIB
     ''')
     subst      = dict()
     local_dict = local.Dictionary()
@@ -52,6 +54,7 @@ if env['OCCAM_TOOLCHAIN'] == 'kroc':
     subst['OCCEXTRAOPTS']  = '' # FIXME: Set dep. on config
     subst['KROC_HOST_OS']  = 'darwin' # FIXME: !!!
     subst['KROC_HOST_CPU'] = 'i386' #FIXME: !!!
+    subst['KROC_ARCHLIBDIR'] = '/dev/null' # FIXME !!!
     kroc = local.Substitute('kroc', 'kroc.in', SUBST=subst)
     local.AddPostAction(kroc, Chmod('$TARGET', 0755))
     env['KROC'] = kroc
