@@ -1,0 +1,27 @@
+-- ALTing on SIGNALs should work.
+-- Should exit cleanly, not STOP.
+
+PROC delay.bool (VAL INT d, CHAN BOOL done!)
+  TIMER tim:
+  INT t:
+  SEQ
+    tim ? now
+    tim ? t AFTER now PLUS d
+    done ! TRUE
+:
+
+PROC main (CHAN BYTE kyb?, scr!)
+  CHAN SIGNAL s:
+  CHAN BOOL done:
+  PAR
+    s ! SIGNAL
+    delay.bool (50000, done!)
+    ALT
+      s ? SIGNAL
+        SEQ
+          scr ! 's'
+          scr ! '*n'
+      BOOL b:
+      done ? b
+        STOP
+:

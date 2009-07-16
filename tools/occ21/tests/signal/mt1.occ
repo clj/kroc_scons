@@ -1,0 +1,10 @@
+-- TEST: Fail
+
+-- Should not be able to read in parallel on a 
+-- channel of type SIGNAL
+PROC main ()
+  CHAN SIGNAL x:
+  PAR
+    x ? SIGNAL
+    x ? SIGNAL
+:

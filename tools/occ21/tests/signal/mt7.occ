@@ -1,0 +1,10 @@
+-- TEST: Fail
+
+-- Should not be able to communicate 
+-- a value over the SIGNAL channel 
+PROC main ()
+  CHAN SIGNAL s:
+  PAR
+    x ! 42
+    x ? SIGNAL
+:

@@ -1,0 +1,26 @@
+-- Should print '1'
+
+PROC delay.bool (VAL INT d, CHAN SIGNAL s!)
+  TIMER tim:
+  INT t:
+  SEQ
+    tim ? now
+    tim ? t AFTER now PLUS d
+    s ! SIGNAL
+:
+
+PROC main (CHAN BYTE kyb?, scr!)
+  CHAN SIGNAL s1, s2:
+  PAR
+    delay.signal (5000, s1!)
+    delay.signal (15000, s2!)
+    ALT
+      s1 ? SIGNAL
+        SEQ
+          scr ! '1'
+          scr ! '*n'
+      s2 ? SIGNAL
+        SEQ
+          scr ! '2'
+          scr !'*n'
+:

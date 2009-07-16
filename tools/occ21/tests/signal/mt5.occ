@@ -1,0 +1,9 @@
+-- TEST: Fail
+
+-- Don't know if ANY is still in the compiler...
+PROC main ()
+  CHAN OF ANY x:
+  PAR
+    x ! SIGNAL
+    x ? SIGNAL
+:

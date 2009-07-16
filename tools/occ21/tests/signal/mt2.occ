@@ -1,0 +1,14 @@
+-- TEST: Fail
+
+-- Should not be able to annotate incorrectly. 
+PROC helper (CHAN SIGNAL x!)
+  SEQ
+    x ? SIGNAL
+:
+
+PROC main ()
+  CHAN SIGNAL x:
+  PAR
+    x ! SIGNAL
+    helper (x?)
+:

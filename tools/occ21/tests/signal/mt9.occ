@@ -1,0 +1,7 @@
+-- TEST: Fail
+
+-- Should not be able to read a SIGNAL from a top-level channel.
+PROC main (CHAN BYTE kyb?, scr!, err!)
+  SEQ
+    kyb ? SIGNAL
+:
