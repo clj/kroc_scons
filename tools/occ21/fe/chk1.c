@@ -3200,6 +3200,8 @@ printtreenl (stderr, 4, *orig);
 		return intnodeptr;
 	case S_CONSTEXP:
 		return typecheck_main (CExpOf (tptr), default_type);
+	case S_SIGNAL:
+		return signalnodeptr;
 	/*{{{  S_STRING */
 	case S_STRING:
 	{
