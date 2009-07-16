@@ -12,6 +12,10 @@ occ21_args = ('-etc -w -y -znd -znec -udo -zncc -init -xin -mobiles -zrpe -zcxdi
 test_header_re = re.compile('--\s*TEST:\s*(.*)')
 expected_re    = re.compile('(ERROR|WARNING):\s*(.*?),\s*[\'"](.*?)[\'"]')
 
+verbose = False
+
+if len(sys.argv) > 3 and sys.argv[3] == '-v': verbose = True
+
 def compile(filename):
     # setup defaults
     mode     = 'pass'
@@ -75,7 +79,7 @@ def compile(filename):
     else:
         test_result = 1
     # print useful info
-    if test_result == 1:
+    if test_result == 1 or verbose:
         print '%s:' % filename
         print ' '.join(cmd)
         print out.strip()
