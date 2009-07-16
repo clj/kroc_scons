@@ -1992,6 +1992,16 @@ printtreenl (stderr, 4, op);
 		}
 #endif
 		/*}}} */
+		/*{{{  case S_SIGNAL */
+	case S_SIGNAL:
+		{
+			treenode *op;
+
+			op = newleafnode (S_SIGNAL, locn);
+			nextsymb ();
+			return op;
+		}
+		/*}}}*/
 	default:
 		synerr_e (SYN_E_EXPR, locn, symb);
 		return NULL;
