@@ -4,6 +4,5 @@
 -- protocol containing SIGNALs.
 PROC main ()
   CHAN OF SIGNAL::[]BYTE s:
-  PROC
-    STOP
+  SKIP
 :
