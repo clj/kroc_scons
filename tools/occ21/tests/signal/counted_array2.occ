@@ -1,0 +1,9 @@
+-- TEST: Fail
+
+-- Should not be able to have a counted array
+-- protocol containing SIGNALs.
+PROC main ()
+  CHAN OF BYTE::[]SIGNAL s:
+  PROC
+    STOP
+:

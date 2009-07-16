@@ -2,6 +2,6 @@
 PROC main ()
   CHAN OF SIGNAL s:
   PAR
-    x ! SIGNAL
-    x ? SIGNAL
+    s ! SIGNAL
+    s ? SIGNAL
 :
