@@ -1,5 +1,10 @@
 import os
 
+try:
+    os.unlink('.coverage')
+except Exception, e:
+    print e
+
 # TODO:
 #   * The make driver scripts seem to always be called.
 
@@ -26,6 +31,9 @@ if ARGUMENTS.get('VERBOSE') != '1':
 	env[k] = comstrings[k]
 
 
+env['OCCBUILD_TOOLCHAIN'] = 'kroc'
+env['OCCAM_TOOLCHAIN'] = env['OCCBUILD_TOOLCHAIN']
+
 # Export it for use in the SConscripts
 Export('env')
 
@@ -33,37 +41,49 @@ Export('env')
 SConscript('tools/mkoccdeps/SConscript')
 SConscript('tools/ilibr/SConscript')
 
-SConscript('tools/schemescanner/SConscript')
-SConscript('tools/tinyswig/SConscript')
-SConscript('tools/skroc/SConscript')
-SConscript('tools/slinker/SConscript')
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    SConscript('tools/schemescanner/SConscript')
+    SConscript('tools/tinyswig/SConscript')
+    SConscript('tools/skroc/SConscript')
+    SConscript('tools/slinker/SConscript')
+if env['OCCAM_TOOLCHAIN'] == 'kroc':
+    SConscript('tools/tranx86/SConscript')
 SConscript('tools/occ21/SConscript')
 SConscript('tools/kroc/SConscript')
 
-SConscript('runtime/libtvm/SConscript')
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    SConscript('runtime/libtvm/SConscript')
+if env['OCCAM_TOOLCHAIN'] == 'kroc':
+    SConscript('runtime/ccsp/SConscript')
 
 # Ensure that things that build with occbuild have triggered the building of all
 # the required tools, there might be a better palce and better way to do this
-env.Depends(env['SKROC'],    env['SCHEMESCANNER'])
-env.Depends(env['SLINKER'],  env['SCHEMESCANNER'])
-env.Depends(env['LIBRARY2'], env['SCHEMESCANNER'])
-env.Depends(env['OCCBUILD'], env['SKROC'])
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    env.Depends(env['SKROC'],    env['SCHEMESCANNER'])
+    env.Depends(env['SLINKER'],  env['SCHEMESCANNER'])
+    env.Depends(env['LIBRARY2'], env['SCHEMESCANNER'])
+    env.Depends(env['OCCBUILD'], env['SLINKER'])
+    env.Depends(env['OCCBUILD'], env['LIBRARY2'])
+    env.Depends(env['OCCBUILD'], env['SKROC'])
+if env['OCCAM_TOOLCHAIN'] == 'kroc':    
+    env.Depends(env['OCCBUILD'], env['CCSP'])
+    env.Depends(env['OCCBUILD'], env['TRANX86'])
+    env.Depends(env['OCCBUILD'], env['KROC'])
 env.Depends(env['OCCBUILD'], env['ILIBR'])
 env.Depends(env['OCCBUILD'], env['OCC21'])
-env.Depends(env['OCCBUILD'], env['SLINKER'])
-env.Depends(env['OCCBUILD'], env['LIBRARY2'])
 env.Tool('occbuild', occbuild=env['OCCBUILD'])
 
 # Not sure if this is necessary
-env.Depends(env['SKROC'], env['TVM_CONFIG_H'])
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    env.Depends(env['SKROC'], env['TVM_CONFIG_H'])
 
-env['OCCBUILD_TOOLCHAIN'] = 'tvm'
 
 
 SConscript('modules/inmoslibs/libsrc/SConscript')
 SConscript('modules/course/SConscript')
 
-SConscript('tvm/posix/SConscript')
+if env['OCCAM_TOOLCHAIN'] == 'tvm':
+    SConscript('tvm/posix/SConscript')
 
 # A bit tedious, and not needed right now.
 # SConscript('tools/occamdoc/SConscript')

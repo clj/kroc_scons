@@ -24,18 +24,22 @@ course_lib = local.OccamLibrary(
         course_lib_srcs,
         INCPATH='.',
         OCCBUILDFLAGS='--include consts.inc')
+course_lib[0].env.Append(INCPATH='.')
 
 def mk_shared_screen(lib_name):
     return local.OccamLibrary(
             lib_name,
             shared_screen_lib_objs,
-            INCPATH='.',
+            INCPATH=[Dir('.')],
             OCCBUILDFLAGS='--need course --include shared_screen.inc')
 
 sharedscreen_lib = mk_shared_screen('shared_screen.lib')
 # Build ss.lib too for backwards compatibility.
 mk_shared_screen('ss.lib')
 
+local.OccLibDepend(course_lib, ['forall'])
+print [n.env['INCPATH'] for n in course_lib]
+print Dir('.'), env['OCCLIBS']['forall']['inc']
 # FIXME: Autodepend???
 local.Depends('shared_screen.tce', course_lib)
 local.Depends('demo_nets.occ', 'demo_cycles.tce')

@@ -168,4 +168,5 @@ occ21 = local.Program(
 
 
 env['OCC21']        = occ21
+env['ENV']['OCC21']        = occ21
 env.AppendENVPath('SKROCPATH', os.path.dirname(occ21[0].abspath))
