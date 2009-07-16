@@ -2388,6 +2388,7 @@ PUBLIC BOOL isconst (treenode * tptr)
 #endif
 		case S_TRUE:
 		case S_FALSE:
+		case S_SIGNAL:
 		case S_STRING:
 		case S_CONSTEXP:
 		case S_CONSTCONSTRUCTOR:
@@ -2660,6 +2661,7 @@ PUBLIC treenode *foldexp (treenode * tptr)
 	case S_FALSE:
 	case S_MOSTPOS:
 	case S_MOSTNEG:
+	case S_SIGNAL:
 		tptr = newconstexp (tptr);
 		break;
 		/*}}}  */

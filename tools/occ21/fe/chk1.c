@@ -4633,6 +4633,8 @@ PUBLIC treenode *chk_gettype_main (treenode *tptr, BOOL orig_type)
 	case S_TRUE:
 	case S_FALSE:
 		return bytenodeptr;
+	case S_SIGNAL:
+		return bytenodeptr;
 	case S_UBYTELIT:
 	case S_UINTLIT:
 	case S_UREALLIT:
@@ -5040,6 +5042,8 @@ PUBLIC int chk_typeof (treenode * tptr)
 		case S_TRUE:
 		case S_FALSE:
 			return (S_BOOL);
+		case S_SIGNAL:
+			return (S_SIGNAL);
 		case S_ASMNAME:
 			return (S_INT);
 		case S_UBYTELIT:
