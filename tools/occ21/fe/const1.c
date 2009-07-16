@@ -1839,6 +1839,11 @@ PUBLIC void foldconstexp (treenode * tptr, BIT32 * reshi, BIT32 * reslo, const i
 		*reslo = 0;
 		break;
 		/*}}}  */
+		/*{{{ case S_SIGNAL */
+	case S_SIGNAL:
+		*reslo = 0;
+		break;
+		/*}}} */
 		/*{{{  case S_UINTLIT, S_UBYTELIT */
 	case S_UINTLIT:
 	case S_UBYTELIT:
