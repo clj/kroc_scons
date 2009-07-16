@@ -3321,6 +3321,7 @@ PRIVATEPARAM treenode *rsimpleprotocol (void)
 	case S_UINT16:
 	case S_UINT32:
 	case S_UINT64:
+	case S_SIGNAL:
 		s = newleafnode (symb, locn);
 		nextsymb ();
 		if (symb == S_COLON2) {

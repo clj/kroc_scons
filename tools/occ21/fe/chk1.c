@@ -78,7 +78,7 @@ PRIVATE wordnode *udo_wordnodeptr;	/* added by Jim for user defined operators te
 
 PRIVATE treenode *bytenodeptr, *int16nodeptr, *int32nodeptr, *int64nodeptr,
 	*uint16nodeptr, *uint32nodeptr, *uint64nodeptr,
-	*real32nodeptr, *real64nodeptr;
+	*real32nodeptr, *real64nodeptr, *signalnodeptr;
 PRIVATE treenode *controlportnodeptr;
 PRIVATE treenode *routenodeptr;
 
@@ -125,6 +125,8 @@ PUBLIC void chkinit (void)
 		unknownnodeptr = newleafnode (S_UNKNOWN, NOPOSN);
 		channodeptr = newtypenode (S_CHAN, NOPOSN, NULL, newleafnode (S_ANY, NOPOSN));
 		chanboolnodeptr = newtypenode (S_CHAN, NOPOSN, NULL, newleafnode (S_BOOL, NOPOSN));
+
+		signalnodeptr = newleafnode(S_SIGNAL, NOPOSN);
 
 		undeclaredp = newleafnode (S_UNDECLARED, NOPOSN);
 	}
@@ -190,6 +192,8 @@ PRIVATE treenode *typenodeptr (int t)
 	case S_MOBILE:
 		return mobilenodeptr;
 #endif
+	case S_SIGNAL:
+		return signalnodeptr;
 	default:
 		return NULL;
 	}
@@ -460,6 +464,7 @@ printtreenl (stderr, 4, ftype);
 			case S_UREALLIT:
 			case S_TIMER:
 			case S_FULLBARRIER:
+			case S_SIGNAL:
 			CASE_CONFIG_TYPE
 				return (TRUE);
 				/*}}} */
@@ -6496,6 +6501,7 @@ printtreenl (stderr, 4, pptr);
 				case S_ANYPROCTYPE:
 				case S_ANYMOBILETYPE:
 #endif
+				case S_SIGNAL:
 					return (tptr);
 #ifdef MOBILES
 				case N_PROCTYPEDECL:
