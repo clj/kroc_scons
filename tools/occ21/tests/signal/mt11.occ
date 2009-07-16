@@ -2,10 +2,10 @@
 
 PROC delay.bool (VAL INT d, CHAN SIGNAL s!)
   TIMER tim:
-  INT t:
+  INT now:
   SEQ
     tim ? now
-    tim ? t AFTER now PLUS d
+    tim ? AFTER now PLUS d
     s ! SIGNAL
 :
 
