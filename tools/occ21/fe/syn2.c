@@ -3256,6 +3256,7 @@ PRIVATEPARAM treenode *rsimpleprotocol (void)
 	case S_REAL32:
 	case S_REAL64:
 	case S_BOOL:
+	case S_SIGNAL:
 #ifndef MOBILES
 	case S_ANY:		/* bug 1395 Added 30/09/91 by CON */
 #else
@@ -3331,7 +3332,6 @@ PRIVATEPARAM treenode *rsimpleprotocol (void)
 	case S_UINT16:
 	case S_UINT32:
 	case S_UINT64:
-	case S_SIGNAL:
 		s = newleafnode (symb, locn);
 		nextsymb ();
 		if (symb == S_COLON2) {
