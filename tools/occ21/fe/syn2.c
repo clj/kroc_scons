@@ -789,7 +789,11 @@ PUBLIC treenode *relement (void)
 		static char *signame = "$sigtmp";
 		int siglen = 7;
 		wordnode *tmpname = lookupword (signame, siglen);
-		a = (treenode *) declname (N_DECL, locn, tmpname, newleafnode (S_SIGNAL, locn), NULL);
+		treenode *vdecl = newdeclnode (S_DECL, locn, NULL, NULL, NULL);
+
+		a = (treenode *) declname (N_DECL, locn, tmpname, newleafnode (S_SIGNAL, locn), vdecl);
+		SetDName (vdecl, a);
+
 		nextsymb ();
 	}
 	else if (symb == S_LBOX)
