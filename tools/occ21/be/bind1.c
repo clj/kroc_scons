@@ -1406,6 +1406,8 @@ PRIVATE void allocate_signal_workspace (treenode *tptr)
 			if ((TagOf (tptr) == S_INPUT) || (TagOf (tptr) == S_X_INPUT)) {
 				treenode *myt = RHSOf (tptr);
 				
+			  DEBUG_MSG (("mappreprocess RHS: %s\n", itagstring (TagOf (myt))));
+
 				/* If *myt is not an empty list, the first element is an N_DECL,
 					 and it is of type S_SIGNAL, then we should create some space
 					 in the workspace for the channel communication to take place.
@@ -1595,7 +1597,6 @@ PUBLIC void mappreprocess (treenode * tptr)
 			/* FIXME: This should be handled elsewhere in the compiler. */
 			allocate_signal_workspace(tptr);
 			
-			DEBUG_MSG (("mappreprocess RHS: %s\n", itagstring (TagOf (myt))));
 			mappreprocesslist (RHSOf (tptr));
 			return;
 		}
