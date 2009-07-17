@@ -1,0 +1,9 @@
+-- Wonder if OF still works. This should pass.
+PROC main ()
+  CHAN INT s:
+  INT foo:
+  PAR
+    s ! 42 
+    INT i:
+    s ? i 
+:

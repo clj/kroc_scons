@@ -1,28 +1,30 @@
 -- Should print '1'
 
-PROC delay.signal (VAL INT d, CHAN SIGNAL s!)
+PROC delay.signal (VAL INT d, CHAN INT s!)
   TIMER tim:
   INT now:
   SEQ
     tim ? now
     tim ? AFTER now PLUS d
-    s ! SIGNAL
+    s ! 42
 :
 
-PROC consume(CHAN SIGNAL s1, s2, CHAN BYTE scr!)
+PROC consume(CHAN INT s1, s2, CHAN BYTE scr!)
   ALT
-    s1 ? SIGNAL
+    INT d:
+    s1 ? d 
       SEQ
         scr ! '1'
         scr ! '*n'
-    s2 ? SIGNAL
+    INT d:
+    s2 ? d 
       SEQ
         scr ! '2'
         scr !'*n'
 :
 
 PROC main (CHAN BYTE kyb?, scr!, err!)
-  CHAN SIGNAL s1, s2:
+  CHAN INT s1, s2:
   PAR
     delay.signal (5000, s1!)
     delay.signal (15000, s2!)

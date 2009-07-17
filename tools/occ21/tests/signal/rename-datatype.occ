@@ -1,0 +1,12 @@
+-- This should give us the ability to prevent
+-- the "UBERSIGNAL" channel from being connected
+-- up with the SIGNAL channel... perhaps?
+-- This is a tricky one.
+DATATYPE UBERSIGNAL IS SIGNAL:
+PROC main ()
+  CHAN UBERSIGNAL u:
+  CHAN SIGNAL s:
+  PAR
+    u ! SIGNAL 
+    s ? SIGNAL
+:
