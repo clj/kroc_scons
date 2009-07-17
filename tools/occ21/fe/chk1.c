@@ -4634,7 +4634,7 @@ PUBLIC treenode *chk_gettype_main (treenode *tptr, BOOL orig_type)
 	case S_FALSE:
 		return bytenodeptr;
 	case S_SIGNAL:
-		return bytenodeptr;
+		return intnodeptr;
 	case S_UBYTELIT:
 	case S_UINTLIT:
 	case S_UREALLIT:

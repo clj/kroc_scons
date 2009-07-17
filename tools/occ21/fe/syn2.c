@@ -784,6 +784,14 @@ PUBLIC treenode *relement (void)
 	DEBUG_MSG (("relement... "));
 	if (symb == S_NAME)
 		a = (treenode *) rname ();	/* name or subscripted element */
+	else if (symb == S_SIGNAL)
+	{
+		static char *signame = "$sigtmp";
+		int siglen = 7;
+		wordnode *tmpname = lookupword (signame, siglen);
+		a = (treenode *) declname (N_DECL, locn, tmpname, newleafnode (S_SIGNAL, locn), NULL);
+		nextsymb ();
+	}
 	else if (symb == S_LBOX)
 		/*{{{  segment */
 	{
