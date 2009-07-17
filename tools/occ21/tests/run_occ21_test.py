@@ -71,11 +71,12 @@ def compile(filename):
                     else:
                         print '         no %s found on line %d' % (type.lower(), line)
 
-        try:
-            filename_tce = os.path.splitext(filename)[0] + '.tce'
-            os.remove(filename_tce)
-        except OSError, e:
-            pass
+        if not verbose:
+            try:
+                filename_tce = os.path.splitext(filename)[0] + '.tce'
+                os.remove(filename_tce)
+            except OSError, e:
+                pass
     else:
         test_result = 1
     # print useful info
