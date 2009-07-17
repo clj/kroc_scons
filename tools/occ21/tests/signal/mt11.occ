@@ -1,6 +1,6 @@
 -- Should print '1'
 
-PROC delay.bool (VAL INT d, CHAN SIGNAL s!)
+PROC delay.signal (VAL INT d, CHAN SIGNAL s!)
   TIMER tim:
   INT now:
   SEQ
