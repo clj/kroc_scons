@@ -1,7 +1,0 @@
--- Wonder if OF still works. This should pass.
-PROC main ()
-  CHAN OF SIGNAL s:
-  PAR
-    s ! SIGNAL
-    s ? SIGNAL
-:

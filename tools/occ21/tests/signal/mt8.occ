@@ -1,8 +1,0 @@
--- TEST: Fail
-
--- Should not be able to send a signal down 
--- a top-level channel.
-PROC main (CHAN BYTE kyb?, scr!, err!)
-  SEQ
-    scr ! SIGNAL
-:
