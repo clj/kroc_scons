@@ -1,0 +1,46 @@
+-- version control marker $Id: cgtest00.occ,v 1.4 1995/10/10 12:55:57 djb1 Exp $
+
+PROC cgtest0 (CHAN OF BYTE keyb, scr, err)
+ 
+  #INCLUDE "cgmain.occ"
+  #IF NOT DEFINED (COMPILER.TOCK)
+  --{{{ Simple channel comms
+  --{{{ Signalling in parallel 
+  PROC SIG0 ()
+    CHAN SIGNAL s:
+    SEQ
+      PAR
+	s ! SIGNAL
+	s ? SIGNAL
+      check (1, 1, "SIG0")
+  :
+  --}}}
+  --{{{ Signalling in an ALT
+  PROC SIG1 ()
+    CHAN SIGNAL s1, s2:
+    INT result:
+    SEQ
+      PAR
+        SEQ
+	  s1 ! SIGNAL
+	  s2 ! SIGNAL
+	SEQ i = 0 FOR 2
+	  ALT 
+	    s1 ? SIGNAL
+	      result := 1
+	    s2 ? SIGNAL
+	      result := 2
+      check(result, 2, "SIG1") 
+  :
+  --}}}
+  --}}}
+  SEQ
+    init ("CG test 3000", "SIGNALs")
+    --{{{ Simple Comms 
+    title("Simple Comms")
+    SIG0()
+    SIG1()
+    --}}}
+    finish ()
+  #ENDIF
+:
