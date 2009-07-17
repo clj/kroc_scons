@@ -1,7 +1,7 @@
--- This should give us the ability to prevent
--- the "UBERSIGNAL" channel from being connected
--- up with the SIGNAL channel... perhaps?
--- This is a tricky one.
+-- TEST:  Fail
+-- ERROR: 5, "expected operand, found SIGNAL"
+-- ERROR: 7, "UBERSIGNAL is not declared"
+-- ERROR: 10, "I/O list item 1 does not match protocol"
 DATATYPE UBERSIGNAL IS SIGNAL:
 PROC main ()
   CHAN UBERSIGNAL u:

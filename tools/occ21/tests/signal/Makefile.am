@@ -11,10 +11,38 @@ DEFS = @DEFS@ @ARCH_DEFS@ -Wall
 EXTRALDFLAGS = @EXTRA_LDFLAGS@
 
 TESTS_ENVIRONMENT = $(srcdir)/../run_occ21_test.py $(top_srcdir)/occ21
-TESTS = chan_signal_decl.occ \
+TESTS = \
+	alt-extended-rendevous.occ \
+	alt-protocol-of-signal.occ \
+	alt-protocol-of-signal2.occ \
+	alt-protocol-of-signal3.occ \
+	alt-protocol-of-signal4.occ \
+	alt-protocol-of-signal5.occ \
+	array-of-signals.occ \
+	assign-signal-to-variable.occ \
+	cast-signal.occ \
+	chan-direction-annotation.occ \
 	chan_array_signal_decl.occ \
-	variable_decl.occ \
-	mt1.occ mt2.occ mt3.occ mt4.occ mt5.occ mt6.occ \
-	mt7.occ mt8.occ mt9.occ mt10.occ mt11.occ \
-	counted_array1.occ counted_array2.occ
+	chan_signal_decl.occ \
+	counted_array1.occ \
+	counted_array2.occ \
+	datatype-signal.occ \
+	declaring-signal-variable.occ \
+	extended-rendevous.occ \
+	int-on-signal-channel.occ \
+	nested-signals.occ \
+	parallel-read.occ \
+	parallel-read2.occ \
+	parallel-write.occ \
+	protocol-of-signal.occ \
+	protocol-of-signal2.occ \
+	protocol-of-signal3.occ \
+	protocol-of-signal4.occ \
+	protocol-of-signal5.occ \
+	rename-datatype.occ \
+	signal-on-chan-int.occ \
+	val-signal.occ \
+	val-signal2.occ \
+	variable_decl.occ
+
 
