@@ -51,9 +51,9 @@ def compile(filename):
             stderr=subprocess.PIPE, 
             )
     (child_stdout, child_stderr) = (p.stdout, p.stderr)
-    ret = p.wait()
     out = child_stdout.read()
     err = child_stderr.read()
+    ret = p.wait()
     # check how we did
     if (ret == 0 and mode == 'pass') or (ret != 0 and mode == 'fail'):
         test_result = 0
