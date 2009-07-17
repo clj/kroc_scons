@@ -6213,6 +6213,7 @@ printtreenl (stderr, 4, typeptr);
 		case S_UINT64:
 		case S_REAL32:
 		case S_REAL64:
+		case S_SIGNAL:
 		case S_TIMER:
 		case S_UNDECLARED:
 		case S_BARRIER:
