@@ -364,6 +364,7 @@ fflush (stdout);
 		case S_REAL32:
 		case S_REAL64:
 		case S_FULLBARRIER:
+		case S_SIGNAL:
 			return TRUE;
 #ifdef MOBILES
 		case S_MOBILE:
