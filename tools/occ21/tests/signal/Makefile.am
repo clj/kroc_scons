@@ -19,7 +19,10 @@ TESTS = \
 	alt-protocol-of-signal4.occ \
 	alt-protocol-of-signal5.occ \
 	array-of-signals.occ \
-	assign-signal-to-variable.occ \
+	assignment1.occ \
+	assignment2.occ \
+	assignment3.occ \
+	assignment4.occ \
 	cast-signal.occ \
 	chan-direction-annotation.occ \
 	chan_array_signal_decl.occ \
@@ -39,6 +42,7 @@ TESTS = \
 	protocol-of-signal3.occ \
 	protocol-of-signal4.occ \
 	protocol-of-signal5.occ \
+	protocol-of-signal6.occ \
 	rename-datatype.occ \
 	signal-on-chan-int.occ \
 	val-signal.occ \
